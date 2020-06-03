@@ -56,9 +56,9 @@ private func signupFieldsView() -> some View {
             TextField("Description", text: $review_source)
            .padding(.horizontal)
             .textFieldStyle(RoundedBorderTextFieldStyle())
-//          TextField("Upload Image", text: $source_url)
-//          .padding(.horizontal)
-//          .textFieldStyle(RoundedBorderTextFieldStyle())
+          TextField("Vehicle Model", text: $source_url)
+          .padding(.horizontal)
+          .textFieldStyle(RoundedBorderTextFieldStyle())
             if image != nil {
                            Image(uiImage: image!)
                                .resizable()

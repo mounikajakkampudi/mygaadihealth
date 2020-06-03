@@ -64,7 +64,7 @@ struct LoginView: View {
     }
     private func list(of movies: AuthViewModel.LoginDetails) -> some View {
         if (movies.token != nil) {
-            return OriganizationsListView(viewModel: OriganizationsListViewModel()).eraseToAnyView()
+            return HomeTabView().eraseToAnyView()
         } else {
             return Text(movies.message ?? "").eraseToAnyView()
         }

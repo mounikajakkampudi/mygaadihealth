@@ -20,8 +20,6 @@ struct MultilineTextView: UIViewRepresentable {
         view.layer.borderColor = UIColor.gray.cgColor
         view.layer.cornerRadius = 5.0
         view.clipsToBounds = true
-        view.frame.size.height = 50
-
         return view
     }
 
@@ -96,7 +94,23 @@ struct MovieDetailView: View {
                     Text("Perhaps the most common cause of a breakdown is either a faulty or a flat battery.")
                         .font(.body).padding(.vertical)
                     Spacer()
-                    MultilineTextView(text: $replyText)
+                    MultilineTextView(text: $replyText).frame(width: Constants.deviceWidth - 20, height: 100, alignment: .center)
+                    HStack{
+                                   Spacer()
+                    Button(action: {
+//                                 self.signupAction()
+                               }) {
+                                   Text("Send Bid")
+                                       .foregroundColor(Color.white)
+                                       .fontWeight(.medium)
+                                   .frame(minWidth: 100, maxWidth: .infinity, minHeight: 44, maxHeight: 44, alignment: .center)
+                               }
+                               .frame(width: 100, height: 40.0)
+                               .background(appColor)
+                               .clipped()
+                               .cornerRadius(5.0)
+                               .padding(EdgeInsets(top: 20, leading: 0, bottom: 0, trailing: 20))
+                    }
                    
                 } .padding(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 8))
             }

@@ -11,6 +11,8 @@ import SwiftUI
 
 struct OriganizationsListView: View {
     @ObservedObject var viewModel: OriganizationsListViewModel
+    @State var toggle: Bool = true
+
     var body: some View {
         NavigationView {
             content
@@ -20,15 +22,11 @@ struct OriganizationsListView: View {
         .onAppear { self.viewModel.send(event: .onAppear) }
     }
     private var toggleButton: some View {
-         Button(action: {}) {
-                          NavigationLink(destination: UploadReview(viewModel: AddReviewModel())){
-                                Text("Add")
-                           .fontWeight(.medium)
-                               .foregroundColor(Constants.appColor)
-                                   .padding(.all)
-                            }
-                        }
-    }
+           Button(action: {
+               self.toggle.toggle()
+               self.viewModel.send(event: .loadMovies)
+           }) {Text(toggle ? "Map" : "List")}
+       }
     private var content: some View {
         switch viewModel.state {
         case .idle:
@@ -38,10 +36,11 @@ struct OriganizationsListView: View {
         case .error(let error):
             return Text(error.localizedDescription).eraseToAnyView()
         case .loaded(let movies):
-            
-//            var org = OriganizationsListView(viewModel: OriganizationsListViewModel())
-//            org.loadMovies(movies: movies)
-            return list(of: movies).eraseToAnyView()
+        var landmarks = [Landmark]()
+       for movie in movies {
+           landmarks.append(Landmark(name: movie.name, location: .init(latitude: -33.852222, longitude: 151.210556)))
+       }
+       return toggle ? list(of: movies).eraseToAnyView() : BizMapView(landmarks: landmarks).eraseToAnyView()
         }
     }
     private func list(of movies: [OriganizationsListViewModel.ListItem]) -> some View {
@@ -51,7 +50,7 @@ struct OriganizationsListView: View {
           return  ZStack {
                  List(movies) { movie in
                            NavigationLink(
-                               destination: MovieDetailView(viewModel: MovieDetailViewModel(movieID: movie.id)),
+                               destination: MovieDetailView(viewModel: MovieDetailViewModel(movieID: movie.id), isUser: false),
                                label: { MovieListItemView(movie: movie) }
                            )
                        }.environment(\.defaultMinListRowHeight, 60)
@@ -71,13 +70,15 @@ struct OriganizationsListView: View {
         Button(action: {
            // self.items.append(Item(value: "Item"))
         }, label: {
+            NavigationLink(destination: UploadReview(viewModel: AddReviewModel())){
             Text("+")
                 .font(.system(.largeTitle))
-                .frame(width: 77, height: 70)
+                .frame(width: 50, height: 44)
                 .foregroundColor(Color.white)
                 .padding(.bottom, 7)
+            }
         })
-        .background(Color.blue)
+            .background(Constants.appColor)
         .cornerRadius(38.5)
         .padding()
         .shadow(color: Color.black.opacity(0.3),
